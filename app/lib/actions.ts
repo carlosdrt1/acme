@@ -33,9 +33,7 @@ export async function createInvoice(formData:FormData) {
         VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
     `; 
     } catch (error) {
-      return {
-        message: 'Database Error: failed to Create Invoice'
-      }
+      return { message: 'Database Error: failed to Create Invoice' };
     }
 
     
@@ -44,10 +42,7 @@ export async function createInvoice(formData:FormData) {
     redirect('/dashboard/invoices');
 }
 
-// Use Zod to update the expected types
 const UpdateInvoice = FormSchema.omit({ id: true, date: true });
- 
-// ...
  
 export async function updateInvoice(id: string, formData: FormData) {
   const { customerId, amount, status } = UpdateInvoice.parse({
@@ -65,9 +60,7 @@ export async function updateInvoice(id: string, formData: FormData) {
     WHERE id = ${id}
   `;
   } catch (error) {
-    return{
-      message: 'Database Error: Failed to Update Invoice'
-    }
+    return{ message: 'Database Error: Failed to Update Invoice' };
   }
   
  
@@ -79,6 +72,7 @@ export async function deleteInvoice(id: string) {
   try {
     await sql`DELETE FROM invoices WHERE id = ${id}`;
     revalidatePath('/dashboard/invoices');
+    return { message: 'Deleted Invoice' };
   } catch (error) {
     return{
       mesage: 'Database Error: Failed to Delete Invoice'
